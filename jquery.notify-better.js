@@ -205,7 +205,7 @@
     var getNotification = function() {
       if (settings.url == false) {
         titleclear();
-        notif = settings.data
+        var notif = settings.data;
         el.hide().html(notif).fadeIn("slow");
         if (settings.updateTitle == true) {
             document.title = "(" + notif + ") " + document.title
