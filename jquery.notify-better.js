@@ -17,8 +17,8 @@
   
   var defaults = {
 		url: false,
-		interval: 5000,
-		overrideAjax: false,
+		interval: false,
+		data: 99,
 		updateTitle: false,
 		updateFavicon: {
 		  id: "favicon",
@@ -56,7 +56,7 @@
     var settings = $.extend({}, defaults, options),
         el = $(this);
         
-        titleclear = function() {
+        var titleclear = function() {
           var matches, regex;
           regex = /\(([0-9]+)\)/;
           matches = document.title;
@@ -80,7 +80,7 @@
           $(this).hide().html("")
         }
         
-        changeFavicon = function(fx) {
+        var changeFavicon = function(fx) {
           if (fx > 0) {
             var canvas = document.createElement('canvas'),
                 ctx,
@@ -202,9 +202,16 @@
         };
     
     
-    getNotification = function() {
-      if (settings.overrideAjax != false) {
-        settings.overrideAjax()
+    var getNotification = function() {
+      if (settings.url == false) {
+        titleclear();
+        notif = settings.data
+        el.hide().html(notif).fadeIn("slow");
+        if (settings.updateTitle == true) {
+            document.title = "(" + notif + ") " + document.title
+        }
+        if(settings.updateFavicon != false ) changeFavicon(notif)
+        settings.done()
       }else {
         $.ajax({
           url: settings.url,
